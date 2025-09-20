@@ -1,14 +1,25 @@
-const express = require('express')
-const cors = require('cors')
-const dotenv = require('dotenv')
-const mongoose = require('mongoose')
-dotenv.config()
-const app = express()
-app.use(cors())
-app.use(express.json())
-app.get('/', (req, res) => res.send('Sealix Backend'))
-const PORT = process.env.PORT || 5000
+keydluffy/Documents/Project/Sealix/backend/server.js
+const express = require('express');
+const connectDB = require('./config/dbConfig');
+const loginRoute = require('./api/auth/login');
+const registerRoute = require('./api/auth/register');
+const issueDocumentRoute = require('./api/documents/issueDocument');
+const forgeryDetectionRoute = require('./api/documents/detectForgery');
 
-mongoose.connect(process.env.MONGO_URI).then(()=> {
-  app.listen(PORT, ()=> console.log('Backend running on', PORT))
-}).catch(err => console.error('DB connect error', err))
+const app = express();
+
+// Connect Database
+connectDB();
+
+// Middleware
+app.use(express.json());
+
+// Routes
+app.use('/api/auth', loginRoute);
+app.use('/api/auth', registerRoute);
+app.use('/api/documents', issueDocumentRoute);
+app.use('/api/documents', forgeryDetectionRoute);
+
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
