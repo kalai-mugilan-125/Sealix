@@ -1,0 +1,134 @@
+Sealix – Development Workflow
+1. Project Setup
+
+Create Root Project: Sealix/
+
+Initialize backend (Node.js + Express) → backend/
+
+Initialize frontend (React/Next.js) → frontend/
+
+Create config files: .env, docker-compose.yml for deployment
+
+2. Backend Development (backend/)
+
+Setup Database (backend/config/dbConfig.js)
+
+Create models: User.js, Document.js, VerificationLog.js
+
+Define relations: Users ↔ Documents
+
+Authentication (backend/api/auth/)
+
+Implement login, register, JWT-based sessions
+
+Document Issuance (backend/api/documents/)
+
+Build issueDocument.js to:
+
+Accept uploaded doc
+
+Generate SHA-256 hash (utils/hashGenerator.js)
+
+Store file in storage/encrypted_docs/
+
+Call blockchain module to store hash
+
+Blockchain Integration (backend/blockchain/)
+
+Configure Hyperledger network (network-config.yaml)
+
+Write chaincode:
+
+storeDocumentHash.go → stores hash + metadata
+
+verifyDocumentHash.go → retrieves hash and compares
+
+AI Integration (backend/ai_engine/)
+
+Implement ocr_model.py (Tesseract/EasyOCR)
+
+Implement forgery_detector.py (signature + seal checks)
+
+Expose Flask/FastAPI endpoint → call from backend API
+
+Verification API (backend/api/verification/)
+
+verifyDocument.js:
+
+Hash uploaded doc
+
+Compare with blockchain hash
+
+Call AI microservice
+
+Return result (authentic/tampered)
+
+3. Frontend Development (frontend/)
+
+Landing & Login Page (pages/index.jsx)
+
+Role-based login (issuer/user/verifier)
+
+Dashboards (pages/dashboard/)
+
+Issuer: Upload templates, issue documents, view issued list
+
+User: View/download docs, generate QR, share
+
+Verifier: Upload/scan doc, view result
+
+Reusable Components (components/)
+
+DocumentCard.jsx, QRModal.jsx, Navbar.jsx
+
+API Services (services/)
+
+authService.js, documentService.js, verificationService.js → connect to backend
+
+4. Blockchain Setup (blockchain/)
+
+Use Docker-Compose to spin up Hyperledger Fabric network
+
+Deploy chaincode using scripts/deployChaincode.sh
+
+Test with sample transactions
+
+5. Testing & Debugging (tests/)
+
+Unit test each backend API (Jest or Mocha)
+
+Integration test blockchain calls
+
+Test AI engine with real documents (authentic & tampered)
+
+6. Deployment
+
+Containerize backend + frontend + blockchain network
+
+Deploy using Docker + NGINX reverse proxy
+
+Secure with HTTPS/SSL
+
+7. Documentation (docs/)
+
+Write architecture.md (system design)
+
+api_reference.md (backend endpoints)
+
+setup_guide.md (installation steps)
+
+Flow Summary
+
+Setup project folders
+
+Build backend APIs
+
+Integrate blockchain chaincode
+
+Build AI forgery detection service
+
+Create frontend dashboards
+
+Test end-to-end flow
+
+Deploy & document
