@@ -1,0 +1,14 @@
+{
+  "name": "sealix-fullstack",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm-run-all --parallel dev:*",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
