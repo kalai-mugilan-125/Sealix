@@ -21,7 +21,7 @@ The project is structured as a full-stack application with a clear separation of
 
 * **Frontend**: Next.js, React, Tailwind CSS
 * **Backend**: Node.js, Express, TypeScript
-* **Database**: PostgreSQL (or a similar relational database)
+* **Database**: PostgreSQL
 * **Cryptography**: Libraries for hashing and digital signatures
 
 ---
