@@ -6,7 +6,6 @@ build
 .vscode
 frontend/node_modules
 backend/node_modules
-Dev-WorkFlow.txt
 dist
 logs
 *.log
