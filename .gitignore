@@ -18,5 +18,9 @@ logs
 *.bak
 backend/.next
 frontend/.next
-frontend/.env.local
 backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.development
+frontend/.env.production
+frontend/.env.test
