@@ -5,8 +5,8 @@ import { logger } from '../config/logger';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, email, password } = req.body;
-    const user = await authService.registerUser(name, email, password);
+    const { name, email, password, role } = req.body;
+    const user = await authService.registerUser(name, email, password, role);
     return respond(res, 201, 'User registered successfully', { user });
   } catch (error) {
     logger.error('Error during registration', error);
@@ -27,4 +27,9 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     logger.error('Error during login', error);
     next(error);
   }
+};
+
+export const verify = (req: Request, res: Response) => {
+  // The user data is available on the request object from the middleware
+  return respond(res, 200, 'Token is valid', { user: req.user });
 };

@@ -17,3 +17,6 @@ logs
 *.swo
 *.bak
 backend/.next
+frontend/.next
+frontend/.env.local
+backend/.env

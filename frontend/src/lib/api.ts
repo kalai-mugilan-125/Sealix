@@ -2,10 +2,11 @@ import axios from "axios";
 import { LoginPayload, LoginResponse, RegisterPayload, ForgotPasswordPayload } from "@/types/auth";
 import { Document, IssuePayload, VerificationResult } from "@/types/document";
 
-const API_BASE_URL = "http://localhost:5000";
+// The base URL must include the /api prefix as configured in your backend routes.
+const API_BASE_URL = "http://localhost:5000/api";
 
 const apiInstance = axios.create({
-  baseURL: `${API_BASE_URL}/api`,
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },

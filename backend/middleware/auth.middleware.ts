@@ -17,3 +17,6 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     return respond(res, 403, 'Invalid token.');
   }
 };
+
+// Renamed from 'authenticateToken' to 'verifyToken' to match the import in auth.routes.ts
+export const verifyToken = authenticateToken;

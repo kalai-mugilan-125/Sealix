@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
-import Navbar from "@/components/layout/NavBar"; // Corrected import path
+import { RoleProvider } from "@/context/RoleContext"; // <-- Import RoleProvider
+import Navbar from "@/components/layout/NavBar";
 import Footer from "@/components/layout/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,11 +22,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} flex flex-col min-h-screen`}>
         <AuthProvider>
-          <Navbar />
-          <main className="flex-grow container mx-auto p-4 md:p-8">
-            {children}
-          </main>
-          <Footer />
+          <RoleProvider> {/* <-- Add RoleProvider here */}
+            <Navbar />
+            <main className="flex-grow container mx-auto p-4 md:p-8">
+              {children}
+            </main>
+            <Footer />
+          </RoleProvider>
         </AuthProvider>
       </body>
     </html>

@@ -5,13 +5,16 @@ import { sequelize } from '../config/db';
 import { Role } from '../models/Role';
 
 export const authService = {
-  async registerUser(name: string, email: string, password: string) {
+  async registerUser(name: string, email: string, password: string, role: string) {
     const hashedPassword = await hashPassword(password);
-    const defaultRole = await Role.findOne({ where: { name: 'user' } });
-    if (!defaultRole) {
-      throw new Error('Default user role not found.');
+    
+    // Find the role based on the input from the frontend
+    const userRole = await Role.findOne({ where: { name: role } });
+    if (!userRole) {
+      throw new Error('User role not found.');
     }
-    const user = await User.create({ name, email, passwordHash: hashedPassword, roleId: defaultRole.id });
+
+    const user = await User.create({ name, email, passwordHash: hashedPassword, roleId: userRole.id });
     return user;
   },
 
