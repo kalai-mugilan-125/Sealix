@@ -1,26 +1,39 @@
-node_modules
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Build outputs
+dist/
+build/
+.next/
+frontend/.next/
+backend/.next/
+
+# Environment files
 .env
-.DS_Store
-dist
-build
-.vscode
-frontend/node_modules
-backend/node_modules
-dist
-logs
-*.log
-.DS_Store
-.vscode
-.idea
-*.iml
-*.swp
-*.swo
-*.bak
-backend/.next
-frontend/.next
-backend/.env
+.env.local
+.env.development
+.env.production
+.env.test
 frontend/.env
 frontend/.env.local
 frontend/.env.development
 frontend/.env.production
 frontend/.env.test
+backend/.env
+
+# IDE and OS files
+.vscode/
+.idea/
+*.iml
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Temp files
+*.swp
+*.swo
+*.bak
