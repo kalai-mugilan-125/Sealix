@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRole } from "@/hooks/useRole";
+import { useAuth } from "@/hooks/useAuth";
 import { ROLES } from "@/lib/constants";
 import { UserRole } from "@/types/user";
 
@@ -10,7 +12,6 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-// Navigation item interfaces
 interface NavSubItem {
   label: string;
   href: string;
@@ -23,6 +24,67 @@ interface NavItem {
   icon: string;
   subItems?: NavSubItem[];
 }
+
+// Icon component with color overlay
+const IconWithOverlay = ({ 
+  src, 
+  alt, 
+  className = "", 
+  size = "w-5 h-5" 
+}: { 
+  src: string; 
+  alt: string; 
+  className?: string; 
+  size?: string; 
+}) => {
+  return (
+    <div className={`${size} ${className} relative`}>
+      <img 
+        src={src} 
+        alt={alt} 
+        className="w-full h-full object-contain"
+        style={{
+          filter: 'brightness(0) saturate(100%) invert(100%)', // Makes any color white
+        }}
+        aria-hidden="true"
+      />
+    </div>
+  );
+};
+
+// Alternative CSS-based approach using mask
+const IconWithMask = ({ 
+  src, 
+  alt, 
+  className = "", 
+  size = "w-5 h-5" 
+}: { 
+  src: string; 
+  alt: string; 
+  className?: string; 
+  size?: string; 
+}) => {
+  return (
+    <div 
+      className={`${size} ${className} bg-current`}
+      style={{
+        maskImage: `url(${src})`,
+        maskSize: 'contain',
+        maskRepeat: 'no-repeat',
+        maskPosition: 'center',
+        WebkitMaskImage: `url(${src})`,
+        WebkitMaskSize: 'contain',
+        WebkitMaskRepeat: 'no-repeat',
+        WebkitMaskPosition: 'center',
+      }}
+      aria-hidden="true"
+    />
+  );
+};
+
+// Icon styles with transitions
+const iconStyle = "text-white transition-colors duration-150 group-hover:text-gray-300";
+const subItemIconStyle = "text-white/80 transition-colors duration-150 group-hover:text-white";
 
 const navLinks: Record<UserRole, NavItem[]> = {
   [ROLES.ISSUER]: [
@@ -64,11 +126,21 @@ const navLinks: Record<UserRole, NavItem[]> = {
 };
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const router = useRouter();
   const { role } = useRole();
+  const { user } = useAuth();
 
-  if (!role) {
-    return null;
-  }
+  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    if (!user || !role) {
+      router.push('/auth/login');
+      return;
+    }
+    router.push(href);
+    onClose();
+  };
+
+  if (!role) return null;
 
   const links = navLinks[role];
 
@@ -95,49 +167,72 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             <li key={link.href}>
               {link.subItems ? (
                 <div className="px-4">
-                  <div className="flex items-center p-2 text-gray-300">
-                    <img 
+                  <div className="flex items-center p-2 text-white group">
+                    {/* Using CSS filter approach */}
+                    <IconWithOverlay 
                       src={link.icon} 
                       alt="" 
-                      className="w-5 h-5 mr-3"
-                      aria-hidden="true"
+                      className={`mr-3 ${iconStyle}`}
                     />
+                    {/* Alternative: Using mask approach - uncomment to use this instead
+                    <IconWithMask 
+                      src={link.icon} 
+                      alt="" 
+                      className={`mr-3 ${iconStyle}`}
+                    />
+                    */}
                     <span className="font-medium">{link.label}</span>
                   </div>
                   <ul className="ml-6 space-y-1">
                     {link.subItems.map((subItem) => (
                       <li key={subItem.href}>
-                        <Link 
-                          href={subItem.href} 
-                          onClick={onClose} 
-                          className="flex items-center p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-md transition-colors duration-150"
+                        <a 
+                          href={subItem.href}
+                          onClick={(e) => handleNavigation(e, subItem.href)}
+                          className="flex items-center p-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-md transition-colors duration-150 group"
                         >
-                          <img 
+                          {/* Using CSS filter approach */}
+                          <IconWithOverlay 
                             src={subItem.icon} 
                             alt="" 
-                            className="w-4 h-4 mr-3"
-                            aria-hidden="true"
+                            className={`mr-3 ${subItemIconStyle}`}
+                            size="w-4 h-4"
                           />
+                          {/* Alternative: Using mask approach - uncomment to use this instead
+                          <IconWithMask 
+                            src={subItem.icon} 
+                            alt="" 
+                            className={`mr-3 ${subItemIconStyle}`}
+                            size="w-4 h-4"
+                          />
+                          */}
                           <span>{subItem.label}</span>
-                        </Link>
+                        </a>
                       </li>
                     ))}
                   </ul>
                 </div>
               ) : (
-                <Link 
-                  href={link.href} 
-                  onClick={onClose} 
-                  className="flex items-center px-6 py-3 hover:bg-gray-700 transition-colors duration-150"
+                <a
+                  href={link.href}
+                  onClick={(e) => handleNavigation(e, link.href)}
+                  className="flex items-center px-6 py-3 hover:bg-gray-700 transition-colors duration-150 group"
                 >
-                  <img 
+                  {/* Using CSS filter approach */}
+                  <IconWithOverlay 
                     src={link.icon} 
                     alt="" 
-                    className="w-5 h-5 mr-3"
-                    aria-hidden="true"
+                    className={`mr-3 ${iconStyle}`}
                   />
+                  {/* Alternative: Using mask approach - uncomment to use this instead
+                  <IconWithMask 
+                    src={link.icon} 
+                    alt="" 
+                    className={`mr-3 ${iconStyle}`}
+                  />
+                  */}
                   <span>{link.label}</span>
-                </Link>
+                </a>
               )}
             </li>
           ))}
