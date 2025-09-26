@@ -18,13 +18,16 @@ export const authService = {
     return user;
   },
 
-  async loginUser(email: string, password: string) {
-    // Includes the Role model to get the role name
+  // 🚨 FIX 3: Accept 'requestedRole' as a parameter
+  async loginUser(email: string, password: string, requestedRole: string) { 
+    // 1. Find user by email, including their Role
     const user = await User.findOne({ where: { email }, include: [Role] });
     
     if (!user) {
       throw new Error('Invalid email or password.');
     }
+    
+    // 2. Check password
     const isMatch = await comparePassword(password, user.passwordHash);
     if (!isMatch) {
       throw new Error('Invalid email or password.');
@@ -35,20 +38,25 @@ export const authService = {
         throw new Error('User role name is missing from the database record.');
     }
     
-    const roleString = user.role.name; 
+    const actualRole = user.role.name; 
 
-    // 1. Generate the token
-    const token = generateToken({ id: user.id, role: roleString });
+    // 🚨 CRITICAL FIX 4: Validate that the requested role matches the actual role
+    if (actualRole.toLowerCase() !== requestedRole.toLowerCase()) {
+      throw new Error(`Access Denied: Your account is registered as '${actualRole}', not as '${requestedRole}'. Please select the correct role.`);
+    }
+
+    // 3. Generate the token
+    const token = generateToken({ id: user.id, role: actualRole });
     
-    // 2. FIX: Construct the clean, flat user object for the frontend
+    // 4. Construct the clean, flat user object for the frontend
     const userForFrontend = {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: roleString, // Clean role string
+        role: actualRole, // Clean role string
     };
     
-    // 3. Return the token and the clean user object
+    // 5. Return the token and the clean user object
     return { token, user: userForFrontend };
   }
 };

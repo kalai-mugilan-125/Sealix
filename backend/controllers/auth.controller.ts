@@ -14,18 +14,25 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     if (error instanceof Error) {
       errorMessage = error.message;
     }
+    // Note: It's better to pass the error to next(error) for centralized error handling middleware
+    // but following your existing pattern:
     return res.status(500).json({ message: errorMessage });
   }
 };
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, password } = req.body;
-    const { token, user } = await authService.loginUser(email, password);
+    // 🚨 FIX 1: Extract 'role' from the request body
+    const { email, password, role } = req.body; 
+    
+    // 🚨 FIX 2: Pass 'role' to the loginUser service function
+    const { token, user } = await authService.loginUser(email, password, role); 
+    
     return respond(res, 200, 'Login successful', { token, user });
   } catch (error) {
     logger.error('Error during login', error);
-    next(error);
+    // This allows the error thrown from authService to be handled globally
+    next(error); 
   }
 };
 

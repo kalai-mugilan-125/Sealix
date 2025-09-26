@@ -45,7 +45,7 @@ export default function UploadForm({ onUpload, allowedFileTypes = ['application/
   return (
     <div className="space-y-4">
       <div className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
-        <label htmlFor="file-upload" className="cursor-pointer text-indigo-600 hover:underline">
+        <label htmlFor="file-upload" className="cursor-pointer text-green-600 hover:underline">
           <input
             id="file-upload"
             type="file"
@@ -60,7 +60,7 @@ export default function UploadForm({ onUpload, allowedFileTypes = ['application/
             <p>{(file.size / 1024 / 1024).toFixed(2)} MB</p>
             <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
               <div
-                className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                className="bg-green-600 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>

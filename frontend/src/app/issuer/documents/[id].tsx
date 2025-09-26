@@ -69,7 +69,7 @@ export default function DocumentDetailsPage() {
               <p className="text-gray-500">Blockchain Hash</p>
               <Link
                 href={`#`} // Replace with actual blockchain explorer link
-                className="font-medium text-indigo-600 hover:underline break-all"
+                className="font-medium text-green-600 hover:underline break-all"
                 target="_blank"
               >
                 {document.blockchainHash}

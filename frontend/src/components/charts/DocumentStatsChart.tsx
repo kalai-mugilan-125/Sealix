@@ -29,7 +29,7 @@ export default function DocumentStatsChart({ data }: DocumentStatsChartProps) {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="issued" fill="#8884d8" name="Documents Issued" />
+        <Bar dataKey="issued" fill="green-600" name="Documents Issued" />
       </BarChart>
     </ResponsiveContainer>
   );
